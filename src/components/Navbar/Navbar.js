@@ -78,7 +78,7 @@ const Navbar = () => {
 	};
 
 	return (
-		<AppBar elevation={0}>
+		<AppBar elevation={0} sx={{ bgcolor: "#2986cc" }}>
 			<Container maxWidth='lg'>
 				<Toolbar disableGutters>
 					{/* 
@@ -97,7 +97,7 @@ const Navbar = () => {
 										display: { xs: "none", md: "flex" },
 									},
 								]}
-								variant='h4'
+								variant='h5'
 							>
 								ExpenseTracker
 							</Typography>

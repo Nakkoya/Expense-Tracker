@@ -3,7 +3,7 @@ export const title = {
 	fontFamily: "monospace",
 	fontWeight: "550",
 	letterSpacing: ".1rem",
-	color: "blue",
+	color: "white",
 	textDecoration: "none",
 	userSelect: "none",
 	":hover": {

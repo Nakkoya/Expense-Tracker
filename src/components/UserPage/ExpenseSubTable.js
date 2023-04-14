@@ -10,6 +10,7 @@ const ExpenseSubTable = ({ data }) => {
 		});
 		return String(total);
 	};
+
 	return (
 		<TableContainer component={Paper} elevation={1}>
 			<Table aria-label='expense'>

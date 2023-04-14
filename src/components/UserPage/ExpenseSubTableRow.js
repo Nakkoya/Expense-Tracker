@@ -37,8 +37,13 @@ const ExpenseTableRow = ({ data }) => {
 
 	return (
 		<>
-			{!useravatar && <CircularProgress />}
-			{useravatar && (
+			{useravatar === null ? (
+				<TableRow>
+					<TableCell>
+						<CircularProgress />
+					</TableCell>
+				</TableRow>
+			) : (
 				<>
 					<TableRow
 						sx={{

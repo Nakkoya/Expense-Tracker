@@ -106,7 +106,14 @@ const Panel2 = () => {
 				}
 			});
 			if (!skip) {
-				await api.addExpenseUser(expenseContext.expenseid, { data: currentData });
+				await api.addExpenseUser(expenseContext.expenseid, {
+					data: {
+						_id: currentData._id,
+						amount: currentData.amount,
+						description: currentData.description,
+						user: currentData.user,
+					},
+				});
 				const { data } = await api.getExpense(expenseContext.expenseid);
 				expenseContext.setExpenseData(data.result);
 				setCurrentData({
@@ -195,9 +202,9 @@ const Panel2 = () => {
 					{selectMode ? (
 						<Box>
 							{searchResult?.length > 0 && (
-								<List sx={style.list} subheader={<li />} disableGutters>
+								<List sx={style.list} subheader={<li />}>
 									{searchResult?.map((user) => (
-										<ListItem key={`${user.username}`} sx={{ padding: 0 }} disableGutters>
+										<ListItem key={`${user.username}`} sx={{ padding: 0 }}>
 											<SearchResult
 												target={user}
 												isFav={checkIsFav(user)}
@@ -214,9 +221,9 @@ const Panel2 = () => {
 							{favouriteList === null ? (
 								<CircularProgress />
 							) : (
-								<List sx={style.list} subheader={<li />} disableGutters>
+								<List sx={style.list} subheader={<li />}>
 									{favouriteList?.length <= 0 ? (
-										<ListItem sx={{ padding: 0 }} disableGutters>
+										<ListItem sx={{ padding: 0 }}>
 											<Box
 												sx={{
 													margin: "5px",
@@ -234,7 +241,7 @@ const Panel2 = () => {
 									) : (
 										<>
 											{favouriteList.map((user) => (
-												<ListItem key={`${user._id}`} sx={{ padding: 0 }} disableGutters>
+												<ListItem key={`${user._id}`} sx={{ padding: 0 }}>
 													<FavouriteResult target={user} userfunc={selectUser} favfunc={updateFav} />
 												</ListItem>
 											))}

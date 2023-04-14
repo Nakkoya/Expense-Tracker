@@ -188,7 +188,7 @@ const Home = () => {
 			if (!includeSelf && notRegistedList.length > 0) {
 				confirm1 = false;
 				confirm1 = window.confirm(
-					"You cannot access this record after submitting if you do not include yourself. \n\nDo you want to continue?"
+					"You will not be able to access this record after submitting if you do not include yourself. \n\nDo you want to continue?"
 				);
 				if (confirm1) {
 					confirm2 = false;
@@ -213,13 +213,20 @@ const Home = () => {
 			}
 
 			if (confirm1 && confirm2) {
-				try {
-					let newList = expenseData.userList.map((item) => {
-						return { _id: item._id, amount: item.amount, description: item.description, user: item.user };
-					});
-					await api.createExpense({ userList: newList, event: expenseData.event });
-				} catch (error) {
-					console.log(error);
+				if (window.confirm("Confirm submit?")) {
+					try {
+						let newList = expenseData.userList.map((item) => {
+							return { _id: item._id, amount: item.amount, description: item.description, user: item.user };
+						});
+						await api.createExpense({ userList: newList, event: expenseData.event });
+						sessionStorage.removeItem("draft");
+						setExpenseData({
+							userList: [],
+							event: "",
+						});
+					} catch (error) {
+						console.log(error);
+					}
 				}
 			}
 		} else {
@@ -281,17 +288,18 @@ const Home = () => {
 			{user ? (
 				<>
 					<Container maxWidth='lg'>
-						<Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
+						<Box sx={style.mainBox}>
 							<Box sx={style.leftBox}>
 								<TextField
 									id='expenseEvent'
 									label='Event'
-									variant='filled'
+									variant='outlined'
 									type='text'
 									value={expenseData.event}
 									onChange={(e) => {
 										setExpenseData({ ...expenseData, event: e.target.value });
 									}}
+									sx={{ borderRadius: "20px" }}
 								/>
 								<ExpenseTable data={expenseData} func={deleteRow} />
 								<Box
@@ -366,9 +374,9 @@ const Home = () => {
 										{selectMode ? (
 											<Box>
 												{searchResult?.length > 0 && (
-													<List sx={style.list} subheader={<li />} disableGutters>
+													<List sx={style.list} subheader={<li />}>
 														{searchResult?.map((user) => (
-															<ListItem key={`${user.username}`} sx={{ padding: 0 }} disableGutters>
+															<ListItem key={`${user.username}`} sx={{ padding: 0 }}>
 																<SearchResult
 																	target={user}
 																	isFav={checkIsFav(user)}
@@ -385,14 +393,9 @@ const Home = () => {
 												{favouriteList === null ? (
 													<CircularProgress />
 												) : (
-													<List
-														sx={style.list}
-														subheader={<li />}
-														disableGutters
-														onScroll={loadMoreItems}
-													>
+													<List sx={style.list} subheader={<li />} onScroll={loadMoreItems}>
 														{favouriteList?.length <= 0 ? (
-															<ListItem sx={{ padding: 0 }} disableGutters>
+															<ListItem sx={{ padding: 0 }}>
 																<Box
 																	sx={{
 																		margin: "5px",
@@ -410,11 +413,7 @@ const Home = () => {
 														) : (
 															<>
 																{favouriteList.map((user) => (
-																	<ListItem
-																		key={`${user._id}`}
-																		sx={{ padding: 0 }}
-																		disableGutters
-																	>
+																	<ListItem key={`${user._id}`} sx={{ padding: 0 }}>
 																		<FavouriteResult
 																			target={user}
 																			userfunc={selectUser}

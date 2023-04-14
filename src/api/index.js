@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = axios.create({ baseURL: "http://localhost:80" });
+const API = axios.create({ baseURL: "https://expensetracker-jc.herokuapp.com/" });
 
 API.interceptors.request.use((req) => {
 	if (localStorage.getItem("user")) {
