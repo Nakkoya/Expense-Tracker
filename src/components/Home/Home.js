@@ -270,16 +270,20 @@ const Home = () => {
 	};
 
 	const handleSetDraft = async () => {
-		try {
-			const result = await api.setDraft(expenseData);
-			if (result.status === 200) window.alert("Saved as draft");
-		} catch (error) {
-			console.log(error);
+		const confirm = window.confirm("Save as draft?");
+		if (confirm) {
+			try {
+				const result = await api.setDraft(expenseData);
+				if (result.status === 200) window.alert("Saved as draft");
+			} catch (error) {
+				console.log(error);
+			}
 		}
 	};
 
 	const loadMoreItems = (e) => {
 		if (Math.abs(e.target.scrollTop + e.target.clientHeight - e.target.scrollHeight) < 2) {
+			// to be implemented if i have time
 		}
 	};
 
@@ -301,7 +305,23 @@ const Home = () => {
 									}}
 									sx={{ borderRadius: "20px" }}
 								/>
-								<ExpenseTable data={expenseData} func={deleteRow} />
+								{expenseData.userList.length === 0 ? (
+									<Typography
+										variant='h5'
+										sx={{
+											my: "14px",
+											fontFamily: "monospace",
+											letterSpacing: ".1rem",
+											color: "inherit",
+											textDecoration: "none",
+											textAlign: "center",
+										}}
+									>
+										Add a user to create an expense record
+									</Typography>
+								) : (
+									<ExpenseTable data={expenseData} func={deleteRow} />
+								)}
 								<Box
 									sx={{
 										display: " flex",

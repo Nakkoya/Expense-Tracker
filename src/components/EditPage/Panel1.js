@@ -1,27 +1,47 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ExpenseContext } from "./EditPage";
 import { TextField, Button, Box, Typography } from "@mui/material";
 import * as api from "../../api/index";
 import * as style from "./styles.js";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const Panel1 = () => {
 	const expenseContext = useContext(ExpenseContext);
 	const [empty, setEmpty] = useState(false);
+	const [oldAmount, setOldAmount] = useState(null);
+	const [oldDesc, setOldDesc] = useState(null);
+	const [openAlert, setOpenAlert] = useState(false);
+
+	useEffect(() => {
+		setOldAmount(expenseContext.selectedData.amount);
+		setOldDesc(expenseContext.selectedData.description);
+	}, []);
 
 	const handleEdit = async () => {
 		if (expenseContext.selectedData.amount === "") {
 			setEmpty(true);
 		} else {
 			setEmpty(false);
-			await api.editExpenseAmount(expenseContext.expenseid, {
-				data: { expenseData: expenseContext.selectedData },
-			});
-
-			await api.editExpenseDesc(expenseContext.expenseid, {
-				data: { expenseData: expenseContext.selectedData },
-			});
-			const { data } = await api.getExpense(expenseContext.expenseid);
-			expenseContext.setExpenseData(data.result);
+			if (expenseContext.selectedData.amount !== oldAmount) {
+				await api.editExpenseAmount(expenseContext.expenseid, {
+					data: { expenseData: expenseContext.selectedData },
+				});
+			}
+			if (expenseContext.selectedData.description !== oldDesc) {
+				await api.editExpenseDesc(expenseContext.expenseid, {
+					data: { expenseData: expenseContext.selectedData },
+				});
+			}
+			if (expenseContext.selectedData.amount !== oldAmount || expenseContext.selectedData.description !== oldDesc) {
+				try {
+					const { data } = await api.getExpense(expenseContext.expenseid);
+					expenseContext.setExpenseData(data.result);
+					setOpenAlert(true);
+				} catch (error) {
+					console.log(error);
+				}
+			}
 		}
 	};
 
@@ -70,6 +90,17 @@ const Panel1 = () => {
 					Cancel
 				</Button>
 			</Box>
+			<Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>
+				<Alert
+					elevation={3}
+					variant='filled'
+					onClose={() => setOpenAlert(false)}
+					severity='success'
+					sx={{ width: "100%" }}
+				>
+					Updated!
+				</Alert>
+			</Snackbar>
 		</>
 	);
 };

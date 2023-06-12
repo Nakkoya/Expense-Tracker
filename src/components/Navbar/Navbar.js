@@ -21,7 +21,7 @@ const Navbar = () => {
 	useEffect(() => {
 		user = JSON.parse(localStorage.getItem("user"));
 		if (!user) setUserAvatar("");
-		if (location.pathname === "/home") {
+		else {
 			const func = async () => {
 				try {
 					if (user) {
@@ -127,11 +127,13 @@ const Navbar = () => {
 								</Box>
 							</>
 						) : (
-							<Box sx={style.buttonContainer}>
-								<Button sx={style.button} variant='contained' color='secondary' onClick={handleToAuth}>
-									Sign in
-								</Button>
-							</Box>
+							location.pathname !== "/auth" && (
+								<Box sx={style.buttonContainer}>
+									<Button sx={style.button} variant='contained' color='secondary' onClick={handleToAuth}>
+										Sign in
+									</Button>
+								</Box>
+							)
 						)}
 					</Box>
 

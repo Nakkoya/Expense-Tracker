@@ -1,10 +1,11 @@
 export const leftBox = {
 	display: "flex",
 	flexDirection: "column",
+	alignItems: "center",
 	width: { xs: "100%", md: "67%" },
 	mr: { xs: 0, md: "10px" },
 	borderRadius: "20px",
-	padding: "10px",
+	py: "10px",
 	overflow: "auto",
 	backgroundColor: "#dddddd",
 };
@@ -16,7 +17,7 @@ export const rightBox = {
 	top: { xs: "auto", md: "70px" },
 	borderRadius: "20px",
 	height: "89vh",
-	padding: "5px",
+	py: "5px",
 	width: { xs: "100%", md: "33%" },
 	overflow: "auto",
 	backgroundColor: "#dddddd",

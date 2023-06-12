@@ -40,4 +40,4 @@ export const authContainer = {
 	"*": { margin: "0px" },
 };
 
-export const textField = { width: "100%", mb: "2px" };
+export const textField = { width: "100%", mb: "7px" };
